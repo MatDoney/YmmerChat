@@ -1,0 +1,19 @@
+{
+    "name": "nom-du-projet/nom-du-paquet",
+    "description": "Description du projet",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "MonProjet\\Utils\\": "src/Utils/",
+            "MonProjet\\Services\\": "src/Services/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Votre Nom",
+            "email": "votre.email@example.com"
+        }
+    ]
+    
+}
