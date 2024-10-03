@@ -11,26 +11,26 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 if (isset($_REQUEST["user_id"])) {
     $user_id = $_REQUEST["user_id"];
 }
-if (isset($_POST["username"])) {
-    $username = $_POST["username"];
+if (isset($_REQUEST["username"])) {
+    $username = $_REQUEST["username"];
 }
-if (isset($_POST["email"])) {
-    $email = $_POST["email"];
+if (isset($_REQUEST["email"])) {
+    $email = $_REQUEST["email"];
 }
-if (isset($_POST["nom"])) {
-    $nom = $_POST["nom"];
+if (isset($_REQUEST["nom"])) {
+    $nom = $_REQUEST["nom"];
 }
-if (isset($_POST["premom"])) {
-    $prenom = $_POST["premom"];
+if (isset($_REQUEST["premom"])) {
+    $prenom = $_REQUEST["premom"];  
 }
-if (isset($_POST["num"])) {
-    $num = $_POST["num"];
+if (isset($_REQUEST["num"])) {
+    $num = $_REQUEST["num"];
 }
-if (isset($_POST["password"])) {
-    $password = $_POST["password"];
+if (isset($_REQUEST["password"])) {
+    $password = $_REQUEST["password"];
 }
-if (isset($_POST["searchby"])) {
-    $searchby = $_POST["searchby"];
+if (isset($_REQUEST["searchby"])) {
+    $searchby = $_REQUEST["searchby"];
 }
 
 
@@ -40,7 +40,37 @@ if (isset($_POST["searchby"])) {
 switch ($requestMethod) {
     // ------ ROUTE GET -----
     case 'GET':
-        var_dump($pdo);
+        try {
+        //RECHERCHE PAR ID
+            if (isset($user_id) && $searchby == "user_id") {
+                $request = "select * from user where user_id = :user_id;";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+            } else {
+                throw new Exception("Utilisateur n'existe pas");
+            }
+            //FIN RECHERCHE PAR ID
+        //RECHERCHE PAR USERNAME A FINIR
+            if (isset($username) && $searchby == "username") {
+                $request = "select * from user where username = like '%:username%';";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+            } else {
+                throw new Exception("Utilisateur n'existe pas");
+            }
+            //FIN RECHERCHE PAR USERNAME
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo $e->getMessage();
+        }
+        
+        
 
         break;
     // ------ FIN ROUTE GET -----
@@ -70,7 +100,7 @@ switch ($requestMethod) {
                 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
                 $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
                 $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
-                $stmt->bindParam(':num', $num, PDO::PARAM_STR);
+                    $stmt->bindParam(':num', $num, PDO::PARAM_STR);
                 $stmt->bindParam(':password', $password, PDO::PARAM_STR);
                 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                 $stmt->execute();
