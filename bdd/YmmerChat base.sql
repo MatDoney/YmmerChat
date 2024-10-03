@@ -1,7 +1,7 @@
 create database YmmerChat;
 
 
-create user "YmmerUser"@"localhost" identified by "}KYyCV\4^JO|l@i";
+create user "YmmerUser"@"localhost" identified by "Arachnide";
 grant insert,update,delete ON YmmerChat.* TO 'YmmerUser'@'localhost';
 
 use YmmerChat;

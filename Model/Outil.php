@@ -3,11 +3,11 @@
  * Fichier contenant toutes les methodes outil
  */
 
-function PdoInit(): PDO {
+function PdoInit() : object {
     try {
 
 
-        include "/bdd/db_settings";
+        include "../../bdd/db_settings.php";
 
         $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
         // Data Source Name
@@ -22,7 +22,7 @@ function PdoInit(): PDO {
             return $pdo;
         
     } catch (Exception $ex) {
-        return $ex->getMessage();
+        return $ex;
     }
     
 }
