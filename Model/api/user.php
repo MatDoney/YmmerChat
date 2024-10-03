@@ -8,8 +8,8 @@ include '../Outil.php';
 $pdo = PdoInit();
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-if (isset($_POST["user_id"])) {
-    $user_id = $_POST["user_id"];
+if (isset($_REQUEST["user_id"])) {
+    $user_id = $_REQUEST["user_id"];
 }
 if (isset($_POST["username"])) {
     $username = $_POST["username"];
@@ -37,10 +37,6 @@ if (isset($_POST["searchby"])) {
 
 
 
-
-
-
-
 switch ($requestMethod) {
     // ------ ROUTE GET -----
     case 'GET':
@@ -51,7 +47,7 @@ switch ($requestMethod) {
     // ------ ROUTE POST -----
     case 'POST':
         try {
-            echo json_encode($_POST);
+
             if (!isset($user_id)) {
                 $request = "insert into user (username,email,nom,prenom,num,password) 
                     values (:username,:email,:nom,:prenom,:num,:password)";
@@ -76,11 +72,12 @@ switch ($requestMethod) {
                 $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
                 $stmt->bindParam(':num', $num, PDO::PARAM_STR);
                 $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                 $stmt->execute();
             } else {
                 throw new Exception("Valeur non défini");
             }
+            echo '{"status":"ok"}';
         } catch (Exception $e) {
             http_response_code(500);
             echo $e->getMessage();
@@ -96,6 +93,19 @@ switch ($requestMethod) {
     // ------ FIN ROUTE PUT -----
     // ------ ROUTE DELETE -----
     case 'DELETE':
+        try {
+            if (isset($user_id)) {
+                $request = "delete from user where user_id = :user_id;";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->execute();
+            } else {
+                throw new Exception("Utilisateur n'existe pas");
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo $e->getMessage();
+        }
 
 
         break;
