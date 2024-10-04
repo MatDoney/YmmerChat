@@ -8,7 +8,7 @@ function PdoInit(): object {
     try {
 
 
-        include "../../bdd/db_settings.php";
+        include $_SERVER['DOCUMENT_ROOT'] . "/bdd/db_settings.php";
 
         $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
         // Data Source Name
@@ -40,4 +40,19 @@ function VerifSession(PDO $pdo): bool {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $_SESSION["token"] == $result[token];
     }
+}
+
+function GetUrl() :string{
+
+// Obtenir le protocole (http ou https)
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+// Obtenir le nom de domaine
+    $host = $_SERVER['HTTP_HOST'];
+
+// Construire l'URL de la racine
+    $rootUrl = $protocol . $host;
+
+// Afficher l'URL racine
+    return $rootUrl;
 }
