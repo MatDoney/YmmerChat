@@ -42,10 +42,12 @@ if (true) {
             <?php include '../View/Footer.php'; ?>
         </body>
     </html>
+    <script src="<?= GetUrl()?>/Model/js/Outil.js"></script>
     <script>
         var domain = "<?= GetUrl() ?>";
         var chatwindow = document.getElementsByClassName("chat-window")[0];
         var data = new FormData();
+        var firstload = true;
         data.append("conv_id", "<?= $conv_id ?>");
         data.append("searchby", "conv_id");
 
@@ -64,6 +66,11 @@ if (true) {
         <span>" + item.username + "</span><span>" + item.date + "</span></div>\n\
         </br><span>" + item.texte + "</span></div>";
                 });
+                if(firstload) {
+                    scrollToBottom(chatwindow);
+                    firstload = !firstload;
+                }
+                
 
             }
         });
@@ -71,7 +78,11 @@ if (true) {
         setInterval(function () {
             xhr.open("GET", domain + "/Model/api/message.php?conv_id=<?= $conv_id ?>&searchby=conv_id");
             xhr.send(data);
+            
         }, 1000);
+        
+
+        
     </script>
 
 

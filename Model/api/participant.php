@@ -23,7 +23,9 @@ switch ($requestMethod) {
         try {
         //recupere les conversation d'un user
             if ($searchby == "user_id") {
-                $request = "select conversation_id from participant where user_id = :user_id;";
+                $request = "select conversation.* from participant "
+                         . "inner join conversation on participant.conversation_id = conversation.conv_id"
+                         . " where user_id = :user_id;";
                 $stmt = $pdo->prepare($request);
                 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                 $stmt->execute();
