@@ -5,4 +5,4 @@
      unset($_SESSION['success_message']); // Pour ne pas afficher le message à nouveau
  }
  ?>
- 
+  <a href="discussion.php" class="btn btn-primary">Accéder à la discussion</a>
