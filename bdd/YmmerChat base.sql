@@ -14,7 +14,7 @@ nom varchar(100),
 prenom varchar(100),
 num varchar(10),
 password varchar(512),
-token varchar(255)
+token varchar(255),
 primary key (user_id)
 
 )ENGINE=InnoDB;
