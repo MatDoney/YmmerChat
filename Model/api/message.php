@@ -3,7 +3,7 @@
 /*
  * 
  */
-
+header('Content-Type: application/json');
 include '../Outil.php';
 $pdo = PdoInit();
 $requestMethod = $_SERVER['REQUEST_METHOD'];
