@@ -144,6 +144,7 @@ switch ($requestMethod) {
             } else {
                 throw new Exception("Utilisateur n'existe pas");
             }
+            echo '{"status":"ok"}';
         } catch (Exception $e) {
             http_response_code(500);
             echo '{"Erreur":"'.$e->getMessage().'"}';
