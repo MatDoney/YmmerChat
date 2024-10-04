@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YmmerChat</title>
+
+    <style>
+        /* Ajout du style plus bas */
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Sidebar pour les contacts et les groupes -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Discussions</h5>
+                    <ul class="list-group list-group-flush" id="chat-list">
+                        <!-- Dynamically loaded list of chats (users or groups) -->
+                        <li class="list-group-item active chat-item" data-chat="1">Groupe de travail</li>
+                        <li class="list-group-item chat-item" data-chat="2"></li>
+                        <li class="list-group-item chat-item" data-chat="3"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Zone principale de chat -->
+            <div class="card">
+                <div class="card-header">Conversation</div>
+                <div class="card-body" id="chat-window">
+                    <!-- Messages de la conversation active -->
+                    <div class="message received">
+                        <div class="message-text">
+                            Bonjour, comment ça va ?
+                        </div>
+                        <div class="message-time">
+                            12:00 PM
+                        </div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-text">
+                            Ça va bien, merci !
+                        </div>
+                        <div class="message-time">
+                            12:05 PM
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="message-input" placeholder="Tapez votre message...">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" onclick="sendMessage()">Envoyer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Ajout de la logique JavaScript
+</script>
+
+</body>
+</html>
+
