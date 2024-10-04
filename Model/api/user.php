@@ -41,6 +41,7 @@ switch ($requestMethod) {
     // ------ ROUTE GET -----
     case 'GET':
         try {
+            
         //RECHERCHE PAR ID
             if (isset($user_id) && $searchby == "user_id") {
                 $request = "select * from user where user_id = :user_id;";
@@ -49,16 +50,27 @@ switch ($requestMethod) {
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($result);
-            } else {
-                throw new Exception("Utilisateur n'existe pas");
             }
             //FIN RECHERCHE PAR ID
         //RECHERCHE PAR USERNAME A FINIR
-            if (isset($username) && $searchby == "username") {
-                $request = "select * from user where username = like '%:username%';";
+            else if (isset($username) && $searchby == "username") {
+                
+                $request = "select * from user where username like :username;";
                 $stmt = $pdo->prepare($request);
+                $username = "%" . $username . "%";
                 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
                 $stmt->execute();
+                
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+            } 
+            else if ($searchby == "all") {
+                
+                $request = "select * from user ";
+                $stmt = $pdo->prepare($request);
+                
+                $stmt->execute();
+                
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($result);
             } else {
@@ -67,7 +79,7 @@ switch ($requestMethod) {
             //FIN RECHERCHE PAR USERNAME
         } catch (Exception $e) {
             http_response_code(500);
-            echo $e->getMessage();
+            echo '{"Erreur":"'.$e->getMessage().'"}';
         }
         
         
@@ -110,7 +122,7 @@ switch ($requestMethod) {
             echo '{"status":"ok"}';
         } catch (Exception $e) {
             http_response_code(500);
-            echo $e->getMessage();
+            echo '{"Erreur":"'.$e->getMessage().'"}';
         }
 
         break;
@@ -134,7 +146,7 @@ switch ($requestMethod) {
             }
         } catch (Exception $e) {
             http_response_code(500);
-            echo $e->getMessage();
+            echo '{"Erreur":"'.$e->getMessage().'"}';
         }
 
 
@@ -142,6 +154,6 @@ switch ($requestMethod) {
     // ----- FIN ROUTE DELETE -----
     default:
         http_response_code(405);
-        echo json_encode(['error' => 'Méthode non autorisée']);
+        echo json_encode(['Erreur' => 'Méthode non autorisée']);
         break;
 }
