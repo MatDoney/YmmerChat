@@ -2,7 +2,7 @@ create database YmmerChat;
 
 
 create user "YmmerUser"@"localhost" identified by "Arachnide";
-grant insert,update,delete ON YmmerChat.* TO 'YmmerUser'@'localhost';
+grant insert,update,delete,select ON YmmerChat.* TO 'YmmerUser'@'localhost';
 
 use YmmerChat;
 
@@ -14,6 +14,7 @@ nom varchar(100),
 prenom varchar(100),
 num varchar(10),
 password varchar(512),
+token varchar(255)
 primary key (user_id)
 
 )ENGINE=InnoDB;
@@ -28,10 +29,10 @@ primary key (conv_id)
 
 create table participant (
 participant_id int not null auto_increment,
-user_id int not null,
-conversation_id int not null,
+user_id int ,
+conversation_id int ,
 primary key(participant_id),
-CONSTRAINT fk_user_participants foreign key (user_id) references user(user_id),
+CONSTRAINT fk_user_participants foreign key (user_id) references user(user_id) on delete cascade,
 CONSTRAINT fk_conversation_participants foreign key (conversation_id) references conversation(conv_id) on delete cascade
 )ENGINE=InnoDB;
 
