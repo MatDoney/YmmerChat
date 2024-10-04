@@ -21,7 +21,7 @@ switch ($requestMethod) {
     // ------ ROUTE GET -----
     case 'GET':
         try {
-
+        //recupere les conversation d'un user
             if ($searchby == "user_id") {
                 $request = "select conversation_id from participant where user_id = :user_id;";
                 $stmt = $pdo->prepare($request);
@@ -29,6 +29,7 @@ switch ($requestMethod) {
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($result);
+        //Recupere les participants d'une conversation
             } else if ($searchby == "conv_id") {
                 $request = "select user_id from participant where conversation_id = :conversation_id;";
                 $stmt = $pdo->prepare($request);
@@ -36,6 +37,7 @@ switch ($requestMethod) {
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($result);
+        //recupere le participant qui correspond a la conversation et le user
             } else if ($searchby == "both") {
                 $request = "select * from participant where user_id = :user_id && conversation_id = :conversation_id";
                 $stmt = $pdo->prepare($request);
