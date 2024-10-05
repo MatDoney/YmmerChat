@@ -35,7 +35,8 @@ switch ($requestMethod) {
                     from message 
                     inner join participant on message.participant_id = participant.participant_id
                     inner join user on participant.user_id = user.user_id
-                    where participant.conversation_id = :conversation_id;";
+                    where participant.conversation_id = :conversation_id
+                    order by message.date asc";
                 $stmt = $pdo->prepare($request);
                 $stmt->bindParam(':conversation_id', $conv_id, PDO::PARAM_INT);
                 $stmt->execute();
