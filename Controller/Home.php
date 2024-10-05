@@ -7,7 +7,7 @@ $pdo = PdoInit();
 
 //$user_id = $_SESSION["user_id"];
 if (isset($_GET["debug"])) {
-    $user_id = 4;
+    $user_id = 1;
     
 }
 
