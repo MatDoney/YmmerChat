@@ -7,7 +7,7 @@ $pdo = PdoInit();
 $conv_id = $_REQUEST["conv_id"];
 //$user_id = $_SESSION["user_id"];
 if (isset($_GET["debug"])) {
-    $user_id = 1;
+    $user_id = 2;
 }
 
 //if (VerifSession($pdo)) {
@@ -50,11 +50,11 @@ if (true) {
         var form = document.getElementById("form");
         var input = document.getElementById("message");
         const conv_id = <?= $conv_id ?>;
-        const user_id = 1 //debug
+        const user_id =<?=$user_id?>; //debug
         var participant_id = GetParticipant_id(conv_id, user_id, domain);
 
         // ----Récupération automatique des derniers messages de la conversation
-        getMessageContinu(conv_id, chatwindow, domain);
+        getMessageContinu(conv_id, chatwindow, domain,participant_id);
         // ---- FIN récupération automatique des messages
 
         // ---- Envoie de messages
