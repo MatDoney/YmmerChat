@@ -9,9 +9,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
         <title></title>
     </head>
     <body>
+    <meta http-equiv="Refresh" content="0; url='/controller/home.php'" />
         
-        <?php
-        // put your code here
-        ?>
     </body>
 </html>
