@@ -32,12 +32,18 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
             var response = JSON.parse(this.responseText);
             chatwindow.innerHTML = "";
             response.forEach(function (item) {
-                chatmessage = "<div class='chat-message' style='border:solid'>\n\
-        <div style='display: flex; justify-content: space-between;'>\n\
-        <span>" + item.username + "</span><span>" + item.date + "</span>\n";
+
 
                 if (item.participant_id === participant_id) {
-                    chatmessage += "<button class='deleteMessage' id='" + item.id + "'>🗑</button>";
+                    chatmessage = "<div class='chat-message message sender' style='border:solid'>\n\
+                    <div style='display: flex; justify-content: space-between;'>\n\
+                    <span><strong><button class='deleteMessage' id='" + item.id + "'>🗑</button>" + item.username + "</strong></span><span class='message-time'><strong>" + item.date + "</strong></span>\n";
+                    
+                } else {
+                    chatmessage = "<div class='chat-message message receiver' style='border:solid'>\n\
+                    <div style='display: flex; justify-content: space-between;'>\n\
+                    <span><strong>" + item.username + "</strong></span><span class='message-time'><strong>" + item.date + "</strong></span>\n";
+
                 }
                 chatmessage += "</div>\n\
         </br><span>" + item.texte + "</span></div>";
@@ -131,5 +137,5 @@ function DeleteMessageById(message_id, site_root) {
 }
 
 function GetParticipantByConvID() {
-    
+
 }

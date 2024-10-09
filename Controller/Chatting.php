@@ -22,6 +22,7 @@ if (true) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Chat</title>
             <link rel="stylesheet" href="/style/styles.css">
+            <link rel="stylesheet" href="/style/conversations.css">
         </head>
         <body>
             <?php include '../View/Header.php'; ?>
@@ -56,10 +57,11 @@ if (true) {
         // ----Récupération automatique des derniers messages de la conversation
         getMessageContinu(conv_id, chatwindow, domain,participant_id);
         // ---- FIN récupération automatique des messages
-
+        scrollToBottom(chatwindow);
         // ---- Envoie de messages
         send.addEventListener("click", function () {
             sendMessage(input, participant_id, domain);
+            scrollToBottom(chatwindow);
         });
         form.addEventListener("submit", function (event) {
             event.preventDefault(); // Empêche le formulaire de se soumettre
