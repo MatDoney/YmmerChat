@@ -56,3 +56,40 @@ function GetUrl() :string{
 // Afficher l'URL racine
     return $rootUrl;
 }
+
+function UpdateUser($username,$email,$nom,$prenom,$num,$user_id,$password,$passwordConfirm) :bool {
+    try {
+        $pdo = PdoInit();
+
+        $request = "update user 
+                    set username = :username,email = :email,nom =:nom, prenom = :prenom,num=:num
+                    where user_id = :user_id ;";
+        $stmt = $pdo->prepare($request);
+
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+        $stmt->bindParam(':num', $num, PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($password != '') {
+            if ($password == $passwordConfirm) {
+                
+                $request = "update user 
+                            set password = :password
+                            where user_id = :user_id ";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+            }
+
+        }
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
