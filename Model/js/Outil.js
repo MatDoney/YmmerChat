@@ -49,10 +49,7 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
         </br><span>" + item.texte + "</span></div>";
                 chatwindow.innerHTML += chatmessage;
             });
-            if (nbmessage !== response.length) {
-                scrollToBottom(chatwindow);
-                nbmessage += response.length;
-            }
+            
             var deleteMessage = document.getElementsByClassName("deleteMessage");
             Array.from(deleteMessage).forEach(function (element) {
                 element.addEventListener("click", function () {
@@ -68,6 +65,8 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
         xhrGet.open("GET", site_root + "/Model/api/message.php?conv_id=" + conv_id + "&searchby=conv_id");
         xhrGet.send();
     }, 250);
+    setTimeout(() => {  scrollToBottom(chatwindow); }, 300);
+    
 }
 
 function GetParticipant_id(conv_id, user_id, site_root) {

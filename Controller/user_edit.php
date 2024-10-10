@@ -7,7 +7,7 @@ if (isset($_GET['debug'])) {
 } else {
     $user_id = $_SESSION['user_id'];
 }
-$pdo = PdoInit();
+
 if (isset($_POST["confirm"])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -27,11 +27,7 @@ if (isset($_POST["confirm"])) {
 
 
 
-$request = "select * from user where user_id = :user_id;";
-$stmt = $pdo->prepare($request);
-$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-$stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = GetUserInfo($user_id);
 
 $username = $result[0]['username'];
 $email = $result[0]['email'];
@@ -98,18 +94,5 @@ $num = $result[0]['num'];
     </div>
     <?php include '../View/Footer.php'; ?>
 </body>
-<script>
-    let password =document.getElementsByName("password")[0];
-    let passwordConfirm =document.getElementsByName("passwordConfirm")[0];
-    let form = document.getElementById("form");
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
-        if(password.value == passwordConfirm.value) {
-            form.submit();
-        
-        }else {
-            alert("Les mots de passes sont differents");
-        }
-    });
-</script>
+<script src="<?= GetUrl() ?>/Model/js/user_edit.js"></script>
 </html>

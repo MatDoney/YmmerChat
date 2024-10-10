@@ -73,7 +73,7 @@ function UpdateUser($username,$email,$nom,$prenom,$num,$user_id,$password,$passw
         $stmt->bindParam(':num', $num, PDO::PARAM_STR);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
-
+        $password = password_hash($password, PASSWORD_DEFAULT);
         if ($password != '') {
             if ($password == $passwordConfirm) {
                 
@@ -92,4 +92,13 @@ function UpdateUser($username,$email,$nom,$prenom,$num,$user_id,$password,$passw
     } catch (PDOException $e) {
         return false;
     }
+}
+function GetUserInfo($user_id) : array {
+    $pdo = PdoInit();
+    $request = "select * from user where user_id = :user_id;";
+$stmt = $pdo->prepare($request);
+$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+return $result;
 }

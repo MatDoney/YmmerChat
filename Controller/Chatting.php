@@ -15,7 +15,7 @@ if (true) {
     ?>
 
 
-
+<!DOCTYPE html>
     <html lang="fr">
         <head>
             <meta charset="UTF-8">
@@ -44,31 +44,11 @@ if (true) {
     </html>
     <script src="<?= GetUrl() ?>/Model/js/Outil.js"></script>
     <script>
-        //Declaration des variables
-        const domain = "<?= GetUrl() ?>";
-        var chatwindow = document.getElementsByClassName("chat-window")[0];
-        var send = document.getElementById("send");
-        var form = document.getElementById("form");
-        var input = document.getElementById("message");
         const conv_id = <?= $conv_id ?>;
         const user_id =<?=$user_id?>; //debug
-        var participant_id = GetParticipant_id(conv_id, user_id, domain);
-
-        // ----Récupération automatique des derniers messages de la conversation
-        getMessageContinu(conv_id, chatwindow, domain,participant_id);
-        // ---- FIN récupération automatique des messages
-        scrollToBottom(chatwindow);
-        // ---- Envoie de messages
-        send.addEventListener("click", function () {
-            sendMessage(input, participant_id, domain);
-            scrollToBottom(chatwindow);
-        });
-        form.addEventListener("submit", function (event) {
-            event.preventDefault(); // Empêche le formulaire de se soumettre
-            sendMessage(input, participant_id, domain);
-        });
-
+        const domain = "<?= GetUrl() ?>";
     </script>
+    <script src="<?= GetUrl() ?>/Model/js/Chatting.js"></script>
 
 
     <?php
