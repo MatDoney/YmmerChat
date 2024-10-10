@@ -5,10 +5,13 @@ require '../Model/Outil.php';
 $pdo = PdoInit();
 
 $conv_id = $_REQUEST["conv_id"];
+//$user_id = $_SESSION['user_id'];
+$user_id =1;
 VerifyConnexion();
 
-//if (VerifSession($pdo)) {
-if (true) {
+IsParticipant($user_id, $conv_id);
+
+
     ?>
 
 
@@ -42,14 +45,14 @@ if (true) {
     <script src="<?= GetUrl() ?>/Model/js/Outil.js"></script>
     <script>
         const conv_id = <?= $conv_id ?>;
-        const user_id =<?=$user_id?>; //debug
+        const user_id =<?=$user_id?>; 
         const domain = "<?= GetUrl() ?>";
     </script>
     <script src="<?= GetUrl() ?>/Model/js/Chatting.js"></script>
 
 
     <?php
-}
+
 
 
 

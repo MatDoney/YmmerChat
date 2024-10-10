@@ -14,7 +14,7 @@ body {
 header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
 }
 .header-button {
     padding:1%;

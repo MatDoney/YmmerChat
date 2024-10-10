@@ -4,6 +4,7 @@
 require '../Model/Outil.php';
 $pdo = PdoInit();
 
+VerifyConnexion();
 
 //$user_id = $_SESSION["user_id"];
 if (isset($_GET["debug"])) {
