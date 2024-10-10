@@ -20,9 +20,6 @@ if (isset($_POST["confirm"])) {
     }
 
 }
-
-
-
 $result = GetUserInfo($user_id);
 
 $username = $result[0]['username'];
@@ -30,8 +27,6 @@ $email = $result[0]['email'];
 $nom = $result[0]['nom'];
 $prenom = $result[0]['prenom'];
 $num = $result[0]['num'];
-
-
 
 ?>
 
@@ -42,6 +37,7 @@ $num = $result[0]['num'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="/style/styles.css">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 </head>
 
 <body>

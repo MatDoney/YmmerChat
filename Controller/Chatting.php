@@ -23,6 +23,7 @@ IsParticipant($user_id, $conv_id);
             <title>Chat</title>
             <link rel="stylesheet" href="/style/styles.css">
             <link rel="stylesheet" href="/style/conversations.css">
+            <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
         </head>
         <body>
             <?php include '../View/Header.php'; ?>
