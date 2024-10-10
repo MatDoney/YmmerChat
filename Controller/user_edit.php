@@ -2,11 +2,7 @@
 session_start();
 include '../Model/Outil.php';
 
-if (isset($_GET['debug'])) {
-    $user_id = 1;
-} else {
-    $user_id = $_SESSION['user_id'];
-}
+VerifyConnexion();
 
 if (isset($_POST["confirm"])) {
     $username = $_POST['username'];

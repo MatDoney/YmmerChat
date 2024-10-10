@@ -5,10 +5,7 @@ require '../Model/Outil.php';
 $pdo = PdoInit();
 
 $conv_id = $_REQUEST["conv_id"];
-//$user_id = $_SESSION["user_id"];
-if (isset($_GET["debug"])) {
-    $user_id = 2;
-}
+VerifyConnexion();
 
 //if (VerifSession($pdo)) {
 if (true) {

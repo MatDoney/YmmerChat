@@ -102,3 +102,16 @@ $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 return $result;
 }
+
+function VerifyConnexion() : void {
+    if (isset($_GET['debug'])) {
+        $user_id = 1;
+    } else {
+        if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+        } else {
+            ?><meta http-equiv="refresh" content="0;url=login.php">
+    <?php
+        }
+    }
+}
