@@ -34,11 +34,11 @@ switch ($requestMethod) {
         try {
             //get message par conv_ID
             if (isset($searchby) && isset($conv_id) && $searchby == "conv_id") {
-                $request = "select message.id, message.texte, user.username, message.date,message.participant_id
+                $request = "select message.id, message.texte, user.username, message.date,message.participant_id,conversation.name
                     from message 
                     inner join participant on message.participant_id = participant.participant_id
                     inner join user on participant.user_id = user.user_id
-                    
+                    inner join conversation on participant.conversation_id = conversation.conv_id
                     where participant.conversation_id = :conversation_id
                     order by message.date asc";
                 $stmt = $pdo->prepare($request);

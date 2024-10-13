@@ -32,7 +32,12 @@ if (isset($_REQUEST["user_id"])) {
 switch ($requestMethod) {
     // ------ ROUTE GET -----
     case 'GET':
-
+        $request = "select * from conversation where conv_id = :conversation_id";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':conversation_id', $conv_id, PDO::PARAM_INT);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo json_encode($result);
 
         break;
     // ------ FIN ROUTE GET -----
@@ -71,10 +76,20 @@ switch ($requestMethod) {
                 $stmt->bindParam(':conv_id', $conv_id, PDO::PARAM_STR);
                 $stmt->execute();
                 //Si la conversation existe déja
-            } else if (isset($conv_id)) {
+            } else if (isset($conv_id) && isset($name)) {
+                $request = "update conversation 
+                            set name = :name
+                            where conv_id = :conv_id ";
+                $stmt = $pdo->prepare($request);
+
+                $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+                $stmt->bindParam(':conv_id', $conv_id, PDO::PARAM_INT);
+                
+                $stmt->execute();
+            }else if (isset($conv_id)) {
                 $request = "update conversation 
                             set name = :name,author = :author
-                            where user_id = :conv_id ";
+                            where conv_id = :conv_id ";
                 $stmt = $pdo->prepare($request);
 
                 $stmt->bindParam(':name', $name, PDO::PARAM_STR);

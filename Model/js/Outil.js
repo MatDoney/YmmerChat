@@ -21,7 +21,7 @@ function sendMessage(input, participant_id, site_root) {
     }
 }
 
-function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
+function getMessageContinu(conv_id, chatwindow, site_root, participant_id, titre) {
 
     var nbmessage = 0;
 
@@ -49,6 +49,7 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
                 chatmessage += "</div>\n\
         </br><span>" + item.texte + "</span></div>";
                 chatwindow.innerHTML += chatmessage;
+                titre.value = item.name;
             });
 
             var deleteMessage = document.getElementsByClassName("deleteMessage");
@@ -66,7 +67,7 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
         xhrGet.open("GET", site_root + "/Model/api/message.php?conv_id=" + conv_id + "&searchby=conv_id");
         xhrGet.send();
     }, 500);
-    
+
 
 }
 
@@ -187,8 +188,8 @@ function GetParticipantByConvID(conv_id, participant_id, listparticipant, site_r
 
 }
 
-function AddParticipant(conv_id, name,site_root) {
-    
+function AddParticipant(conv_id, name, site_root) {
+
     var data = new FormData();
     data.append("name", name);
     data.append("conv_id", conv_id);
@@ -199,7 +200,7 @@ function AddParticipant(conv_id, name,site_root) {
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
             var response = JSON.parse(this.responseText);
-            if ( typeof response.status == "undefined") {
+            if (typeof response.status == "undefined") {
                 alert("Utilisateur introuvable");
             }
         }
@@ -209,3 +210,24 @@ function AddParticipant(conv_id, name,site_root) {
 
     xhr.send(data);
 };
+
+function editTitle(conv_id, titre, site_root) {
+    if(titre != '') {
+    var data = new FormData();
+    data.append("conv_id", conv_id);
+    data.append("name", titre);
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        
+    });
+
+    xhr.open("POST", site_root + "/Model/api/conversation.php");
+
+    xhr.send(data);
+}else {
+    alert("veuillez entrer un titre");
+}
+}
