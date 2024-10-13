@@ -36,6 +36,14 @@ if (true) {
                 </div>
                 
             </div>
+
+              <!-- créer une nouvelle conversation -->
+              <div class="new-conversation">
+                <a href="NewConversation.php">
+                    <button type="button" class="btn btn-primary">Créer une nouvelle conversation</button>
+                </a>
+            </div>
+
             <?php include '../View/Footer.php'; ?>
         </body>
     </html>
