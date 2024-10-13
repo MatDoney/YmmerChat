@@ -13,6 +13,9 @@ if (isset($_REQUEST["conv_id"])) {
 if (isset($_REQUEST["user_id"])) {
     $user_id = $_REQUEST["user_id"];
 }
+if (isset($_REQUEST["name"])) {
+    $name = $_REQUEST["name"];
+}
 if (isset($_REQUEST["participant_id"])) {
     $participant_id = $_REQUEST["participant_id"];
 }
@@ -67,6 +70,19 @@ switch ($requestMethod) {
         // ------ ROUTE POST -----
     case 'POST':
         try {
+            //si recherche par name
+            if (!isset($user_id) && isset($name)) {
+                $request = "select user_id from user where username = :name";
+                $stmt = $pdo->prepare($request);
+
+                $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($result)) {
+                    $user_id = $result[0]["user_id"];
+                }
+            }
             //verification si le participant n'existe pas déja
             $request = "select * from participant where user_id = :user_id && conversation_id = :conversation_id";
             $stmt = $pdo->prepare($request);
@@ -75,7 +91,7 @@ switch ($requestMethod) {
             $stmt->bindParam(':conversation_id', $conv_id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if (empty($result)) {
+            if (empty($result) && isset($user_id)) {
                 //creation du participant
                 $request = "insert into participant (user_id,conversation_id) 
                     values (:user_id,:conversation_id)";
@@ -102,16 +118,16 @@ switch ($requestMethod) {
     case 'DELETE':
         if (isset($participant_id)) {
             try {
-            $request = "delete from participant where participant_id = :participant_id";
-            $stmt = $pdo->prepare($request);
-            $stmt->bindParam(':participant_id', $participant_id, PDO::PARAM_INT);
-            $stmt->execute();
-            echo '{"status":"ok"}';
-        } catch (Exception $e) {
-            echo '{"Erreur":"' . $e->getMessage() . '"}';
+                $request = "delete from participant where participant_id = :participant_id";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':participant_id', $participant_id, PDO::PARAM_INT);
+                $stmt->execute();
+                echo '{"status":"ok"}';
+            } catch (Exception $e) {
+                echo '{"Erreur":"' . $e->getMessage() . '"}';
+            }
         }
-    }
-        
+
         break;
         // ----- FIN ROUTE DELETE -----
     default:

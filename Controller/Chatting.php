@@ -28,9 +28,9 @@ IsParticipant($user_id, $conv_id);
 </head>
 
 <body>
-
     <?php include '../View/Header.php'; ?>
-    
+
+
 
 
     <div class="chat-container">
@@ -47,11 +47,17 @@ IsParticipant($user_id, $conv_id);
             <button type="button" id="send">Envoyer</button>
         </form>
     </div>
-    <div class="chat-container">
-    <td colspan="2"><h2>Participants : </h2></td>
-    <table class="list-participant">
 
-    </table>
+    <div class="chat-container">
+        <td colspan="2">
+            <h2>Participants : </h2>
+        </td>
+        <div style="display: flex ;">
+            <input type="text" placeholder="Utilisateur" id="searchbar">
+            <button type="button" id="AddUser">Ajouter</button>
+        </div>
+        <table class="list-participant">
+        </table>
     </div>
 
     <?php include '../View/Footer.php'; ?>

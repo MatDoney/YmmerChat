@@ -5,6 +5,8 @@ var listparticipant = document.getElementsByClassName("list-participant")[0];
 var send = document.getElementById("send");
 var form = document.getElementById("form");
 var input = document.getElementById("message");
+var AddUser = document.getElementById("AddUser");
+var searchbar = document.getElementById("searchbar");
 
 
 var participant_id = GetParticipant_id(conv_id, user_id, domain);
@@ -25,6 +27,10 @@ form.addEventListener("submit", function (event) {
 // ---- Récupération des participants à la conversation
 GetParticipantByConvID(conv_id,participant_id, listparticipant, domain);
 
+AddUser.addEventListener("click", function() {
+    AddParticipant(conv_id, searchbar.value,domain);
+    searchbar.value = "";
+})
 
 
 
