@@ -34,7 +34,18 @@ IsParticipant($user_id, $conv_id);
 
 
     <div class="chat-container">
-        <h2>Bienvenue !</h2>
+        <h2>
+        <table>
+            <tr>
+                <td>
+                    <input type="text" id="titre" readonly style="background: none;border: none;color: white;text-align: center;font-size: xx-large;font-weight: bold;" />
+                    <input type="text" id="titre-change" readonly style="display : none;background: none;border: none;color: white;text-align: center;font-size: xx-large;font-weight: bold;" placeholder="Nouveau Nom">
+                </td>
+                <td>
+                    <button id="edit-titre">✏️</button>
+                </td>
+            </tr>
+        </table></h2>
         <div class="chat-window">
             <!-- Fenêtre de discussion en temps réel -->
             <!-- Affichage des messages -->
