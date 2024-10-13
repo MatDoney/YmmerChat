@@ -4,7 +4,8 @@
  * Fichier contenant toutes les methodes outil
  */
 
-function PdoInit(): object {
+function PdoInit(): object
+{
     try {
 
 
@@ -29,30 +30,100 @@ function PdoInit(): object {
  * Compare la derniere session utilisateur avec l'actuel 
  */
 
-function VerifSession(PDO $pdo): bool {
-    if (!isset($_SESSION["user_id"]) || !isset($_SESSION["token"])) {
-        return false;
-    } else {
-        $requete = "select token from user where user_id = :user_id";
-        $stmt = $pdo->prepare($requete);
-        $stmt->bindParam(':user_id', $_SESSION["user_id"], PDO::PARAM_INT);
+
+
+function GetUrl(): string
+{
+
+    // Obtenir le protocole (http ou https)
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+    // Obtenir le nom de domaine
+    $host = $_SERVER['HTTP_HOST'];
+
+    // Construire l'URL de la racine
+    $rootUrl = $protocol . $host;
+
+    // Afficher l'URL racine
+    return $rootUrl;
+}
+
+function UpdateUser($username, $email, $nom, $prenom, $num, $user_id, $password, $passwordConfirm): bool
+{
+    try {
+        $pdo = PdoInit();
+
+        $request = "update user 
+                    set username = :username,email = :email,nom =:nom, prenom = :prenom,num=:num
+                    where user_id = :user_id ;";
+        $stmt = $pdo->prepare($request);
+
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+        $stmt->bindParam(':num', $num, PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $_SESSION["token"] == $result[token];
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        if ($password != '') {
+            if ($password == $passwordConfirm) {
+
+                $request = "update user 
+                            set password = :password
+                            where user_id = :user_id ";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+            }
+
+        }
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+function GetUserInfo($user_id): array
+{
+    $pdo = PdoInit();
+    $request = "select * from user where user_id = :user_id;";
+    $stmt = $pdo->prepare($request);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function VerifyConnexion(): void
+{
+    if (!isset($_GET['debug'])) {
+        
+        if (!isset($_SESSION['user_id']))  {
+            ?>
+            <meta http-equiv="refresh" content="0;url=login.php">
+            <?php
+        }
     }
 }
 
-function GetUrl() :string{
+function IsParticipant($user_id, $conv_id)
+{
+    $pdo = PdoInit();
+    $request = "select * from participant where user_id = :user_id && conversation_id = :conversation_id";
+    $stmt = $pdo->prepare($request);
 
-// Obtenir le protocole (http ou https)
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':conversation_id', $conv_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtenir le nom de domaine
-    $host = $_SERVER['HTTP_HOST'];
+    
+    if (empty($result)) {
+        ?>
+            <meta http-equiv="refresh" content="0;url=home.php">
+            <?php
+    }
 
-// Construire l'URL de la racine
-    $rootUrl = $protocol . $host;
-
-// Afficher l'URL racine
-    return $rootUrl;
 }
