@@ -6,11 +6,11 @@ $pdo = PdoInit();
 
 VerifyConnexion();
 
-//$user_id = $_SESSION["user_id"];
-if (isset($_GET["debug"])) {
-    $user_id = 2;
-    
-}
+$user_id = $_SESSION["user_id"];
+//if (isset($_GET["debug"])) {
+//    $user_id = 2;
+//    
+//}
 
 //if (VerifSession($pdo)) {
 if (true) {

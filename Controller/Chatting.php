@@ -6,7 +6,7 @@ $pdo = PdoInit();
 
 $conv_id = $_REQUEST["conv_id"];
 //$user_id = $_SESSION['user_id'];
-$user_id =1;
+$user_id = $_SESSION["user_id"];
 VerifyConnexion();
 
 IsParticipant($user_id, $conv_id);

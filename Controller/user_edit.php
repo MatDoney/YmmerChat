@@ -3,7 +3,7 @@ session_start();
 include '../Model/Outil.php';
 
 VerifyConnexion();
-
+$user_id = $_SESSION["user_id"];
 if (isset($_POST["confirm"])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -20,6 +20,7 @@ if (isset($_POST["confirm"])) {
     }
 
 }
+
 $result = GetUserInfo($user_id);
 
 $username = $result[0]['username'];
