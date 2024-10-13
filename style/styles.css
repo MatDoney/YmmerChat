@@ -11,6 +11,16 @@ body {
     color: #333333; /* gris foncé */
     line-height: 1.6;
 }
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.header-button {
+    padding:1%;
+    border-radius: 100%;
+    font-size : 25px;
+}
 
 .container {
     max-width: 500px;
@@ -48,7 +58,8 @@ form {
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="submit"] {
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;

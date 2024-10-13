@@ -15,7 +15,8 @@ prenom varchar(100),
 num varchar(10),
 password varchar(512),
 token varchar(255),
-primary key (user_id)
+primary key (user_id),
+unique key (username)
 
 )ENGINE=InnoDB;
 
@@ -24,6 +25,7 @@ conv_id int not null auto_increment,
 name varchar(255),
 author int,
 created_AT DateTime default now(),
+private boolean,
 primary key (conv_id)
 )ENGINE=InnoDB;
 

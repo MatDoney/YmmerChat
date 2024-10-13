@@ -17,6 +17,7 @@ function sendMessage(input, participant_id, site_root) {
 
         xhrSend.send(dataSend);
         input.value = "";
+        setTimeout(() => { scrollToBottom(chatwindow); }, 300);
     }
 }
 
@@ -38,7 +39,7 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
                     chatmessage = "<div class='chat-message message sender' style='border:solid'>\n\
                     <div style='display: flex; justify-content: space-between;'>\n\
                     <span><strong><button class='deleteMessage' id='" + item.id + "'>🗑</button>" + item.username + "</strong></span><span class='message-time'><strong>" + item.date + "</strong></span>\n";
-                    
+
                 } else {
                     chatmessage = "<div class='chat-message message receiver' style='border:solid'>\n\
                     <div style='display: flex; justify-content: space-between;'>\n\
@@ -49,10 +50,7 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
         </br><span>" + item.texte + "</span></div>";
                 chatwindow.innerHTML += chatmessage;
             });
-            if (nbmessage !== response.length) {
-                scrollToBottom(chatwindow);
-                nbmessage += response.length;
-            }
+
             var deleteMessage = document.getElementsByClassName("deleteMessage");
             Array.from(deleteMessage).forEach(function (element) {
                 element.addEventListener("click", function () {
@@ -67,7 +65,9 @@ function getMessageContinu(conv_id, chatwindow, site_root, participant_id) {
     setInterval(function () {
         xhrGet.open("GET", site_root + "/Model/api/message.php?conv_id=" + conv_id + "&searchby=conv_id");
         xhrGet.send();
-    }, 250);
+    }, 500);
+    
+
 }
 
 function GetParticipant_id(conv_id, user_id, site_root) {
@@ -106,7 +106,7 @@ function getConversationsByUserID(user_id, site_root, chatwindow) {
             chatwindow.innerHTML = "";
             response.forEach(function (item) {
 
-                chatwindow.innerHTML += "<a href='" + site_root + "/controller/chatting.php?conv_id=" + item.conv_id + "&debug=1'><div class='chat-conversation' style='border:solid'>\n\
+                chatwindow.innerHTML += "<a href='" + site_root + "/controller/chatting.php?conv_id=" + item.conv_id + "'><div class='chat-conversation' style='border:solid'>\n\
         <div style='display: flex; justify-content: space-between;'>\n\
         <span>" + item.name + "</span></div></a>";
             });
@@ -117,7 +117,7 @@ function getConversationsByUserID(user_id, site_root, chatwindow) {
     setInterval(function () {
         xhr.open("GET", site_root + "/Model/api/participant.php?user_id=" + user_id + "&searchby=user_id");
         xhr.send();
-    }, 250);
+    }, 1000);
 
 }
 
@@ -125,17 +125,87 @@ function DeleteMessageById(message_id, site_root) {
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
 
-    xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
 
-        }
-    });
 
     xhr.open("DELETE", site_root + "/Model/api/message.php?message_id=" + message_id);
 
     xhr.send();
 }
 
-function GetParticipantByConvID() {
+
+function DeleteParticipantById(participant_id, site_root) {
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.open("DELETE", site_root + "/Model/api/participant.php?participant_id=" + participant_id);
+
+    xhr.send();
+}
+
+function GetParticipantByConvID(conv_id, participant_id, listparticipant, site_root) {
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            var response = JSON.parse(this.responseText);
+            author = response[0].author;
+            listparticipant.innerHTML = "";
+            isParticipant = false;
+            response.forEach(function (item) {
+
+                var ligne = '';
+                ligne += "<tr id='" + item.participant_id + "'><td>" + item.username + "</td>";
+                if (item.participant_id != participant_id && author == participant_id) {
+                    ligne += "<td><span><strong><button class='deleteParticipant' id='" + item.participant_id + "'>🗑</button></span></td>";
+                }
+                ligne += "</tr>"
+                listparticipant.innerHTML += ligne
+                if (item.participant_id == participant_id) {
+                    isParticipant = true;
+                }
+            });
+            //redirection si plus participant
+            if (!isParticipant) {
+                window.location.replace(site_root + "/controller/home.php")
+            }
+
+            var DeleteParticipantButton = document.getElementsByClassName("deleteParticipant");
+            Array.from(DeleteParticipantButton).forEach(item => {
+                item.addEventListener("click", function () {
+                    DeleteParticipantById(item.id, site_root);
+                });
+            });
+        }
+    });
+    setInterval(function () {
+        xhr.open("GET", site_root + "/Model/api/participant.php?conv_id=" + conv_id + "&searchby=conv_id");
+        xhr.send();
+    }, 1000);
 
 }
+
+function AddParticipant(conv_id, name,site_root) {
+    
+    var data = new FormData();
+    data.append("name", name);
+    data.append("conv_id", conv_id);
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            var response = JSON.parse(this.responseText);
+            if ( typeof response.status == "undefined") {
+                alert("Utilisateur introuvable");
+            }
+        }
+    });
+
+    xhr.open("POST", site_root + "/Model/api/participant.php");
+
+    xhr.send(data);
+};
