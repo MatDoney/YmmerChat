@@ -155,12 +155,42 @@ form button {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .container, .chat-container {
-        max-width: 90%;
+        max-width: 85%;
+    }
+}
+
+@media (max-width: 768px)
+    .container, .chat-container {
+        max-width: 95%;
+        padding: 15px; 
     }
 
     .chat-window {
-        height: 300px;
+        height: 250px; 
+        overflow-y: auto; 
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        padding-top: 60px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    button {
+        font-size: 14px;
+        padding: 8px; 
+    }
+
+    .chat-window {
+        height: 200px;
     }
 }
