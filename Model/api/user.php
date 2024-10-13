@@ -20,8 +20,8 @@ if (isset($_REQUEST["email"])) {
 if (isset($_REQUEST["nom"])) {
     $nom = $_REQUEST["nom"];
 }
-if (isset($_REQUEST["premom"])) {
-    $prenom = $_REQUEST["premom"];  
+if (isset($_REQUEST["prenom"])) {
+    $prenom = $_REQUEST["prenom"];
 }
 if (isset($_REQUEST["num"])) {
     $num = $_REQUEST["num"];
@@ -41,8 +41,8 @@ switch ($requestMethod) {
     // ------ ROUTE GET -----
     case 'GET':
         try {
-            
-        //RECHERCHE PAR ID
+
+            //RECHERCHE PAR ID
             if (isset($user_id) && $searchby == "user_id") {
                 $request = "select * from user where user_id = :user_id;";
                 $stmt = $pdo->prepare($request);
@@ -52,25 +52,24 @@ switch ($requestMethod) {
                 echo json_encode($result);
             }
             //FIN RECHERCHE PAR ID
-        //RECHERCHE PAR USERNAME A FINIR
+            //RECHERCHE PAR USERNAME A FINIR
             else if (isset($username) && $searchby == "username") {
-                
+
                 $request = "select * from user where username like :username;";
                 $stmt = $pdo->prepare($request);
                 $username = "%" . $username . "%";
                 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
                 $stmt->execute();
-                
+
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($result);
-            } 
-            else if ($searchby == "all") {
-                
+            } else if ($searchby == "all") {
+
                 $request = "select * from user ";
                 $stmt = $pdo->prepare($request);
-                
+
                 $stmt->execute();
-                
+
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($result);
             } else {
@@ -79,10 +78,10 @@ switch ($requestMethod) {
             //FIN RECHERCHE PAR USERNAME
         } catch (Exception $e) {
             http_response_code(500);
-            echo '{"Erreur":"'.$e->getMessage().'"}';
+            echo '{"Erreur":"' . $e->getMessage() . '"}';
         }
-        
-        
+
+
 
         break;
     // ------ FIN ROUTE GET -----
@@ -112,7 +111,7 @@ switch ($requestMethod) {
                 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
                 $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
                 $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
-                    $stmt->bindParam(':num', $num, PDO::PARAM_STR);
+                $stmt->bindParam(':num', $num, PDO::PARAM_STR);
                 $stmt->bindParam(':password', $password, PDO::PARAM_STR);
                 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                 $stmt->execute();
@@ -122,7 +121,7 @@ switch ($requestMethod) {
             echo '{"status":"ok"}';
         } catch (Exception $e) {
             http_response_code(500);
-            echo '{"Erreur":"'.$e->getMessage().'"}';
+            echo '{"Erreur":"' . $e->getMessage() . '"}';
         }
 
         break;
@@ -147,7 +146,7 @@ switch ($requestMethod) {
             echo '{"status":"ok"}';
         } catch (Exception $e) {
             http_response_code(500);
-            echo '{"Erreur":"'.$e->getMessage().'"}';
+            echo '{"Erreur":"' . $e->getMessage() . '"}';
         }
 
 
