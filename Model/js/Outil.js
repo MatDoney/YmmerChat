@@ -156,6 +156,7 @@ function GetParticipantByConvID(conv_id, participant_id, listparticipant, site_r
             var response = JSON.parse(this.responseText);
             author = response[0].author;
             listparticipant.innerHTML = "";
+            isParticipant = false;
             response.forEach(function (item) {
 
                 var ligne = '';
@@ -165,8 +166,14 @@ function GetParticipantByConvID(conv_id, participant_id, listparticipant, site_r
                 }
                 ligne += "</tr>"
                 listparticipant.innerHTML += ligne
+                if (item.participant_id == participant_id) {
+                    isParticipant = true;
+                }
             });
-
+            //redirection si plus participant
+            if(!isParticipant) {
+                window.location.replace(site_root+"/controller/home.php")
+            }
 
             var DeleteParticipantButton = document.getElementsByClassName("deleteParticipant");
             Array.from(DeleteParticipantButton).forEach(item => {
