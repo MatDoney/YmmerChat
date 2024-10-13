@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once '../bdd/db_settings.php'; // Inclut le fichier de configuration de la base de données
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupération des données du formulaire de connexion
     $username = $_POST['username'];
@@ -12,13 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("SELECT * FROM user WHERE username = ? OR email = ?");
         $stmt->execute([$username, $username]);
         $user = $stmt->fetch();
-
+        
         // Vérification si l'utilisateur existe
-        if ($user) {
+        if (!empty($user)) {
             // Vérifie le mot de passe hashé
             if (password_verify($password, $user['password'])) {
                 // Si le mot de passe correspond, démarre la session utilisateur
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['success_message'] = "Connexion réussie. Bienvenue, " . $user['username'] . "!";
                 header('Location: ../Controller/home.php'); // Redirige vers la page d'accueil
@@ -50,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Connexion</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 </head>
 <body>
     <div class="container mt-5">

@@ -14,6 +14,9 @@ if (isset($_REQUEST["searchby"])) {
 if (isset($_REQUEST["conv_id"])) {
     $conv_id = $_REQUEST["conv_id"];
 }
+if (isset($_REQUEST["message_id"])) {
+    $message_id = $_REQUEST["message_id"];
+}
 if (isset($_REQUEST["searchby"])) {
     $searchby = $_REQUEST["searchby"];
 }
@@ -29,12 +32,13 @@ switch ($requestMethod) {
     // ------ ROUTE GET -----
     case 'GET':
         try {
-        //get message par conv_ID
+            //get message par conv_ID
             if (isset($searchby) && isset($conv_id) && $searchby == "conv_id") {
-                $request = "select message.id, message.texte, user.username, message.date
+                $request = "select message.id, message.texte, user.username, message.date,message.participant_id
                     from message 
                     inner join participant on message.participant_id = participant.participant_id
                     inner join user on participant.user_id = user.user_id
+                    
                     where participant.conversation_id = :conversation_id
                     order by message.date asc";
                 $stmt = $pdo->prepare($request);
@@ -56,8 +60,8 @@ switch ($requestMethod) {
     // ------ ROUTE POST -----
     case 'POST':
         TRY {
-        //post message 
-        
+            //post message 
+
             if (isset($texte) && isset($participant_id)) {
                 $request = "insert into message (texte,participant_id)
             values (:texte,:participant_id);";
@@ -83,6 +87,22 @@ switch ($requestMethod) {
     // ------ FIN ROUTE PUT -----
     // ------ ROUTE DELETE -----
     case 'DELETE':
+        try {
+            if (isset($message_id)) {
+                $request = "delete from ymmerchat.message where ymmerchat.message.id = :id;";
+                $stmt = $pdo->prepare($request);
+
+                $stmt->bindParam(':id', $message_id, PDO::PARAM_STR);
+                //$stmt->bindParam(':participant_id', $participant_id, PDO::PARAM_INT);
+
+                $stmt->execute();
+                echo '{"status":"ok"}';
+            } else {
+                throw new Exception("Message non supprimé");
+            }
+        } catch (Exception $e) {
+            echo '{"Erreur":"' . $e->getMessage() . '"}';
+        }
 
 
         break;

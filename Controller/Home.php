@@ -4,12 +4,13 @@
 require '../Model/Outil.php';
 $pdo = PdoInit();
 
+VerifyConnexion();
 
-//$user_id = $_SESSION["user_id"];
-if (isset($_GET["debug"])) {
-    $user_id = 1;
-    
-}
+$user_id = $_SESSION["user_id"];
+//if (isset($_GET["debug"])) {
+//    $user_id = 2;
+//    
+//}
 
 //if (VerifSession($pdo)) {
 if (true) {
@@ -23,11 +24,12 @@ if (true) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Chat</title>
             <link rel="stylesheet" href="/style/styles.css">
+            <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
         </head>
         <body>
             <?php include '../View/Header.php'; ?>
             <div class="chat-container">
-                <h2>Bienvenue !</h2>
+                <h2>Conversations :</h2>
                 <div class="chat-window">
                     <!-- Fenêtre de discussion en temps réel -->
                     <!-- Affichage des messages -->
@@ -41,31 +43,9 @@ if (true) {
     <script>
         var domain = "<?= GetUrl() ?>";
         var chatwindow = document.getElementsByClassName("chat-window")[0];
-        var data = new FormData();
-        data.append("user_id", "<?= $user_id ?>");
-        data.append("searchby", "user_id");
+        var user_id = <?=$user_id?>;
 
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4 && xhr.status === 200) {
-
-                var response = JSON.parse(this.responseText);
-                chatwindow.innerHTML = "";
-                response.forEach(function (item) {
-                    
-                    chatwindow.innerHTML += "<a href='"+domain+"/controller/chatting.php?conv_id="+item.conv_id+"&debug=1'><div class='chat-conversation' style='border:solid'>\n\
-        <div style='display: flex; justify-content: space-between;'>\n\
-        <span>" + item.name + "</span></div></a>";
-                });
-
-            }
-        });
-
-        
-            xhr.open("GET", domain + "/Model/api/participant.php?user_id=<?=$user_id?>&searchby=user_id");
-            xhr.send(data);
+        getConversationsByUserID(user_id, domain, chatwindow) 
         
     </script>
 
