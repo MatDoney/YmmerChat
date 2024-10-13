@@ -11,21 +11,25 @@
         <header>
             <h1>YmmerChat</h1>
             <nav>
-                <button id="login-btn">Connexion</button>
-                <button id="register-btn">Inscription</button>
+                <a href="login.php"><button id="login-btn">Connexion</button></a>
+                <a href="register.php"><button id="register-btn">Inscription</button></a>
                 <button id="logout-btn" style="display:none;">Déconnexion</button>
             </nav>
         </header>
 
-<div class="auth-container">
-    <div class="login-form">
-        <img src="assets/test.jpg" class="rounded mx-auto d-block" style="max-height: 200px;">
-        <h2>Se connecter</h2>
-        <form method="POST" action="Index.php">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Se connecter</button>
-        </form>
-        <a href="Index.php">Mot de passe oublié ?</a>
+        <div class="auth-container">
+            <div class="login-form">
+                <img src="assets/test.jpg" class="rounded mx-auto d-block" style="max-height: 200px;">
+                <h2>Se connecter</h2>
+                <form method="POST" action="Index.php">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Se connecter</button>
+                </form>
+                <p>Vous n'avez pas encore de compte ? <a href="register.php">Inscrivez-vous ici</a></p>
+                <a href="Index.php">Mot de passe oublié ?</a>
+            </div>
+        </div>
     </div>
-</div>
+</body>
+</html>

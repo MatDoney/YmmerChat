@@ -12,6 +12,7 @@ body {
     line-height: 1.6;
 }
 
+/* Style du container global */
 .container {
     max-width: 500px;
     margin: 30px auto;
@@ -19,6 +20,25 @@ body {
     background-color: #ffffff; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+}
+
+/* Style du header */
+.header {
+    background-color: #5f259f;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustement pour le contenu sous le header */
+body {
+    padding-top: 80px;
 }
 
 h2 {
@@ -144,4 +164,3 @@ form button {
         height: 300px;
     }
 }
-
