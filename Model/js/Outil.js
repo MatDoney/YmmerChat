@@ -124,11 +124,7 @@ function DeleteMessageById(message_id, site_root) {
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
 
-    xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
 
-        }
-    });
 
     xhr.open("DELETE", site_root + "/Model/api/message.php?message_id=" + message_id);
 
@@ -140,7 +136,7 @@ function DeleteParticipantById(participant_id, site_root) {
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
 
-    xhr.open("DELETE", site_root + "/Model/api/participant.php?participant_id="+participant_id);
+    xhr.open("DELETE", site_root + "/Model/api/participant.php?participant_id=" + participant_id);
 
     xhr.send();
 }
@@ -171,14 +167,14 @@ function GetParticipantByConvID(conv_id, participant_id, listparticipant, site_r
                 }
             });
             //redirection si plus participant
-            if(!isParticipant) {
-                window.location.replace(site_root+"/controller/home.php")
+            if (!isParticipant) {
+                window.location.replace(site_root + "/controller/home.php")
             }
 
             var DeleteParticipantButton = document.getElementsByClassName("deleteParticipant");
             Array.from(DeleteParticipantButton).forEach(item => {
-                item.addEventListener("click", function() {
-                    DeleteParticipantById(item.id,site_root) ;
+                item.addEventListener("click", function () {
+                    DeleteParticipantById(item.id, site_root);
                 });
             });
         }
@@ -189,3 +185,26 @@ function GetParticipantByConvID(conv_id, participant_id, listparticipant, site_r
     }, 1000);
 
 }
+
+function AddParticipant(conv_id, name,site_root) {
+    
+    var data = new FormData();
+    data.append("name", name);
+    data.append("conv_id", conv_id);
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            var response = JSON.parse(this.responseText);
+            if ( typeof response.status == "undefined") {
+                alert("Utilisateur introuvable");
+            }
+        }
+    });
+
+    xhr.open("POST", site_root + "/Model/api/participant.php");
+
+    xhr.send(data);
+};
