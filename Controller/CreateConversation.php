@@ -1,5 +1,5 @@
 <?php
- session_start();
+session_start();
 
 require '../Model/Outil.php';
 $pdo = PdoInit();
@@ -12,9 +12,9 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-
+$user_id = $_SESSION['user_id'];
 // Récupérer l'ID de l'utilisateur connecté
-$author = $_SESSION['user_id'];
+
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -23,18 +23,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $private = isset($_POST['private']) ? 1 : 0; // 1 si privé, sinon 0
     $participants = isset($_POST['participants']) ? $_POST['participants'] : [];
 
+
     // Initialiser la connexion à la base de données
-   
+
     try {
-        // Insérer la conversation et récupérer l'ID de la conversation
-        $stmt = $pdo->prepare("INSERT INTO conversation (name, author, private) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $author, $private]); // Utiliser l'ID de l'auteur ici
-        $conversation_id = $pdo->lastInsertId(); // Récupérer l'ID de la nouvelle conversation
+        //creation du participant a partir de l'auteur";
+        $request = "insert into participant (user_id,conversation_id) 
+        values (:user_id,null)";
+        $stmt = $pdo->prepare($request);
 
-        // Ajouter l'auteur comme participant
-        $stmt_participant = $pdo->prepare("INSERT INTO participant (user_id, conversation_id) VALUES (?, ?)");
-        $stmt_participant->execute([$author, $conversation_id]); // Ajout de l'auteur
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $participant_id = $pdo->lastInsertId();
+        //création de la conversation";
+        $request = "insert into conversation (name,author,private) 
+        values (:name,:author,:private)";
+        $stmt = $pdo->prepare($request);
 
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':author', $participant_id, PDO::PARAM_INT);
+        $stmt->bindParam(':private', $private, PDO::PARAM_INT);
+        $stmt->execute();
+        $conv_id = $pdo->lastInsertId();
+        //on assigne au participant la conversation";
+        $request = "update participant 
+                set conversation_id = :conv_id
+                where participant_id = :participant_id ";
+        $stmt = $pdo->prepare($request);
+        $stmt->bindParam(':participant_id', $participant_id, PDO::PARAM_INT);
+        $stmt->bindParam(':conv_id', $conv_id, PDO::PARAM_INT);
+        $stmt->execute();
         // Vérifier l'existence des autres utilisateurs avant de les ajouter
         foreach ($participants as $user_id) {
             // Vérifie si l'utilisateur existe
@@ -42,7 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userCheck->execute([$user_id]);
             if ($userCheck->fetchColumn() > 0) {
                 // Ajouter le participant à la conversation
-                $stmt_participant->execute([$user_id, $conversation_id]);
+                $request = "insert into participant (user_id,conversation_id) 
+        values (:user_id,:conv_id)";
+                $stmt = $pdo->prepare($request);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->bindParam(':conv_id', $conv_id, PDO::PARAM_INT);
+
+                $stmt->execute();
             } else {
                 echo "L'utilisateur avec l'ID $user_id n'existe pas. <br>";
             }
@@ -53,12 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: Chatting.php?conv_id=" . $conversation_id);
 
         exit(); // Toujours utiliser exit après une redirection
-        
+
     } catch (PDOException $e) {
         // Gérer les erreurs (optionnel : enregistrer les erreurs, afficher un message, etc.)
-        echo "Erreur lors de la création de la conversation : " . $e->getMessage();
-        
+        echo "Erreur lors de la création de la conversation : ".$e->getLine()." " . $e->getMessage();
     }
-    echo "Paramètres pour la conversation : Name: $name, Author ID: $participant_id, Private: $private <br>";
+    //echo "Paramètres pour la conversation : Name: $name, Author ID: $participant_id, Private: $private <br>";
 }
-?>
